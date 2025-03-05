@@ -58,7 +58,8 @@ public class HelloDynamic {
               (signalName, encodedArgs) -> name = encodedArgs.get(0, String.class));
 
       // Register dynamic query handler
-      Workflow.registerListener((DynamicQueryHandler) (signalName, encodedValues) -> "hi all");
+      Workflow.registerListener(
+          (DynamicQueryHandler) (queryName, encodedValues) -> "hi from query: " + queryName);
 
       // Define activity options and get ActivityStub
       ActivityStub activity =
