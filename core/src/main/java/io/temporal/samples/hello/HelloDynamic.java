@@ -11,6 +11,7 @@ import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
 import io.temporal.workflow.ActivityStub;
+import io.temporal.workflow.DynamicQueryHandler;
 import io.temporal.workflow.DynamicSignalHandler;
 import io.temporal.workflow.DynamicWorkflow;
 import io.temporal.workflow.Workflow;
@@ -36,6 +37,10 @@ public class HelloDynamic {
       Workflow.registerListener(
           (DynamicSignalHandler)
               (signalName, encodedArgs) -> name = encodedArgs.get(0, String.class));
+
+      // Register dynamic query handler
+      Workflow.registerListener(
+          (DynamicQueryHandler) (queryName, encodedValues) -> "hi from query: " + queryName);
 
       // Define activity options and get ActivityStub
       ActivityStub activity =
@@ -119,6 +124,8 @@ public class HelloDynamic {
 
     // Start workflow execution and signal right after Pass in the workflow args and signal args
     workflow.signalWithStart("greetingSignal", new Object[] {"John"}, new Object[] {"Hello"});
+
+    System.out.println(workflow.query("queryGreeting", String.class));
 
     // Wait for workflow to finish getting the results
     String result = workflow.getResult(String.class);
