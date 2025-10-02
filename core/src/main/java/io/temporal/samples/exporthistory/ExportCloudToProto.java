@@ -49,7 +49,7 @@ public class ExportCloudToProto {
     List<io.temporal.api.export.v1.WorkflowExecution> allExecutions =
         client
             // #2 change your query
-            .listExecutions("CloseTime>=\"2025-09-30T19:43:00.000Z\"")
+            .listExecutions("CloseTime<=\"2025-09-30T19:43:00.000Z\"")
             .map(
                 executionMetadata -> {
                   var exec = executionMetadata.getExecution();
