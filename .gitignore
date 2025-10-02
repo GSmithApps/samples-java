@@ -19,3 +19,4 @@ target
 bin/
 core/.vscode/
 .claude/
+.vscode/
