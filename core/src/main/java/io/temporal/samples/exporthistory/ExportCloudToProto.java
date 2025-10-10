@@ -18,19 +18,13 @@ public class ExportCloudToProto {
 
   public static void main(String[] args) {
 
-    // #1 change these
-    String endpoint = "grant-test-mtls.a2dd6.tmprl.cloud:7233";
-    String namespace = "grant-test-mtls.a2dd6";
-    String clientCertPath = "/Users/grantsmith/temporal-certs/client.pem";
-    String clientKeyPath = "/Users/grantsmith/temporal-certs/client.key";
-
     InputStream clientCert = null;
     InputStream clientKey = null;
     SslContext sslContext = null;
 
     try {
-      clientCert = new FileInputStream(clientCertPath);
-      clientKey = new FileInputStream(clientKeyPath);
+      clientCert = new FileInputStream(Constants.CLIENT_CERT_PATH);
+      clientKey = new FileInputStream(Constants.CLIENT_KEY_PATH);
       sslContext = SimpleSslContextBuilder.forPKCS8(clientCert, clientKey).build();
     } catch (Exception e) {
       throw new RuntimeException("Error resolving file paths for mTLS: ", e);
@@ -39,17 +33,17 @@ public class ExportCloudToProto {
         WorkflowServiceStubs.newServiceStubs(
             WorkflowServiceStubsOptions.newBuilder()
                 .setSslContext(sslContext)
-                .setTarget(endpoint)
+                .setTarget(Constants.ENDPOINT)
                 .build());
 
     WorkflowClient client =
         WorkflowClient.newInstance(
-            service, WorkflowClientOptions.newBuilder().setNamespace(namespace).build());
+            service, WorkflowClientOptions.newBuilder().setNamespace(Constants.NAMESPACE).build());
 
     List<io.temporal.api.export.v1.WorkflowExecution> allExecutions =
         client
             // #2 change your query
-            .listExecutions("CloseTime<=\"2025-09-30T19:43:00.000Z\"")
+            .listExecutions(Constants.QUERY)
             .map(
                 executionMetadata -> {
                   var exec = executionMetadata.getExecution();
@@ -74,13 +68,11 @@ public class ExportCloudToProto {
     FileOutputStream fos = null;
     try {
 
-      String filePath = "./src/main/java/io/temporal/samples/exporthistory/workflow_history.proto";
-
-      fos = new FileOutputStream(filePath);
+      fos = new FileOutputStream(Constants.FILE_PATH);
 
       fos.write(binary);
 
-      System.out.println("Workflow history saved to: " + filePath);
+      System.out.println("Workflow history saved to: " + Constants.FILE_PATH);
 
     } catch (IOException e) {
       System.err.println("An error occurred while writing the file: " + e.getMessage());

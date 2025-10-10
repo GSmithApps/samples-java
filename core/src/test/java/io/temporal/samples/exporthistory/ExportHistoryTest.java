@@ -21,18 +21,14 @@ public class ExportHistoryTest {
   public void testExportEquality() {
 
     WorkflowExecutions executionsFromScript;
-    String inputFileNameFromScript =
-        "./src/main/java/io/temporal/samples/exporthistory/workflow_history.proto";
-    try (FileInputStream fis = new FileInputStream(inputFileNameFromScript)) {
+    try (FileInputStream fis = new FileInputStream(Constants.FILE_PATH)) {
       executionsFromScript = WorkflowExecutions.parseFrom(fis);
     } catch (IOException e) {
       throw new RuntimeException("Error reading proto file: ", e);
     }
 
     WorkflowExecutions executionsFromCloudExport;
-    String inputFileNameFromCloudExport =
-        "./src/test/java/io/temporal/samples/exporthistory/example-from-cloud.proto";
-    try (FileInputStream fis = new FileInputStream(inputFileNameFromCloudExport)) {
+    try (FileInputStream fis = new FileInputStream(Constants.INPUT_FILE_NAME_FROM_CLOUD_EXPORT)) {
       executionsFromCloudExport = WorkflowExecutions.parseFrom(fis);
     } catch (IOException e) {
       throw new RuntimeException("Error reading proto file: ", e);

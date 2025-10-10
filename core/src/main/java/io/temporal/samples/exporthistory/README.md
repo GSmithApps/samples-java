@@ -11,9 +11,9 @@ It reads workflow executions from a cloud namespace and writes them to
 
 ## Instructions
 
-1. Update the connection config (namespace, endpoint, file paths for the certs, etc)
-2. Modify the query to suit your needs
-3. Run the following command to run the code
+1. In Constants.java, update the connection config (namespace, endpoint, file paths for the certs, etc), and
+   modify the query to suit your needs.
+2. Run the following command to run the code
    `./gradlew -q execute -PmainClass=io.temporal.samples.exporthistory.ExportCloudToProto`
 
 ## Caveats and Considerations
